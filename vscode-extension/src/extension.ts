@@ -1,6 +1,6 @@
 import * as vscode from "vscode"
 
-const format = async (text: string) => {
+export const format = async (text: string) => {
 	// todo: somehow get ESM working
 	const { execa } = await import("execa")
 
