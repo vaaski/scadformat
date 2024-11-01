@@ -5,7 +5,7 @@ import unicorn from "eslint-plugin-unicorn"
 
 export default tsEslint.config(
 	{ files: ["**/*.{js,mjs,cjs,ts}"] },
-	{ ignores: ["esbuild.js", "dist/**/*"] },
+	{ ignores: ["esbuild.js", "dist/**/*", "out/**/*", ".vscode-test/**/*"] },
 	{ languageOptions: { globals: globals.browser } },
 	pluginJs.configs.recommended,
 	...tsEslint.configs.recommended,
