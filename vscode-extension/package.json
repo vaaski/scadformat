@@ -20,7 +20,9 @@
 		"test": "vscode-test",
 		"check-types": "tsc --noEmit",
 		"lint": "eslint .",
-		"format": "prettier -w ."
+		"format": "prettier -w .",
+		"vsce:package": "vsce package --no-dependencies",
+		"vsce:publish": "vsce publish --no-dependencies"
 	},
 	"contributes": {
 		"commands": [
@@ -56,6 +58,7 @@
 		"@typescript-eslint/parser": "^8.7.0",
 		"@vscode/test-cli": "^0.0.10",
 		"@vscode/test-electron": "^2.4.1",
+		"@vscode/vsce": "^3.2.1",
 		"esbuild": "^0.24.0",
 		"eslint": "^9.13.0",
 		"eslint-plugin-unicorn": "^56.0.0",
