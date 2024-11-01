@@ -28,9 +28,25 @@
 				"command": "scadformat.helloWorld",
 				"title": "Hello World"
 			}
+		],
+		"languages": [
+			{
+				"id": "scad",
+				"aliases": [
+					"OpenSCAD",
+					"openscad",
+					"scad"
+				],
+				"extensions": [
+					".scad"
+				]
+			}
 		]
 	},
-	"activationEvents": [],
+	"activationEvents": [
+		"onLanguage:scad",
+		"workspaceContains:**/*.scad"
+	],
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@types/mocha": "^10.0.9",
@@ -51,5 +67,8 @@
 	},
 	"engines": {
 		"vscode": "^1.95.0"
+	},
+	"dependencies": {
+		"execa": "^9.5.1"
 	}
 }

@@ -1,34 +1,44 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+const format = async (text: string) => {
+	// todo: somehow get ESM working
+	const { execa } = await import("execa")
+
+	const command = execa("scadformat")
+	command.stdin.write(text)
+	command.stdin.end()
+
+	const { stdout } = await command
+	return stdout
+}
+
 export function activate(context: vscode.ExtensionContext) {
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "scadformat" is now active!')
+	const formatter = vscode.languages.registerDocumentFormattingEditProvider("scad", {
+		provideDocumentFormattingEdits: async (
+			document: vscode.TextDocument,
+		): Promise<vscode.TextEdit[]> => {
+			try {
+				const inputText = document.getText()
+				const formatted = await format(inputText)
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand("scadformat.helloWorld", () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage("Hello World from scadformat!")
-	})
+				return [
+					new vscode.TextEdit(new vscode.Range(0, 0, document.lineCount, 0), formatted),
+				]
+			} catch (error) {
+				console.error(error)
 
-	context.subscriptions.push(disposable)
+				if (error instanceof Error) {
+					vscode.window.showErrorMessage(`Failed to format document\n\n${error.message}`)
+				} else {
+					vscode.window.showErrorMessage("Failed to format document")
+				}
 
-	vscode.languages.registerDocumentFormattingEditProvider("foo-lang", {
-		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
-			const firstLine = document.lineAt(0)
-			if (firstLine.text !== "42") {
-				return [vscode.TextEdit.insert(firstLine.range.start, "42\n")]
+				return []
 			}
 		},
 	})
+
+	context.subscriptions.push(formatter)
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
