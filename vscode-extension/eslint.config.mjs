@@ -1,28 +1,17 @@
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
+import globals from "globals"
+import pluginJs from "@eslint/js"
+import tsEslint from "typescript-eslint"
+import unicorn from "eslint-plugin-unicorn"
 
-export default [{
-    files: ["**/*.ts"],
-}, {
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
-    },
-
-    languageOptions: {
-        parser: tsParser,
-        ecmaVersion: 2022,
-        sourceType: "module",
-    },
-
-    rules: {
-        "@typescript-eslint/naming-convention": ["warn", {
-            selector: "import",
-            format: ["camelCase", "PascalCase"],
-        }],
-
-        curly: "warn",
-        eqeqeq: "warn",
-        "no-throw-literal": "warn",
-        semi: "warn",
-    },
-}];
+export default tsEslint.config(
+	{ files: ["**/*.{js,mjs,cjs,ts}"] },
+	{ languageOptions: { globals: globals.browser } },
+	pluginJs.configs.recommended,
+	...tsEslint.configs.recommended,
+	unicorn.configs["flat/recommended"],
+	{
+		rules: {
+			"unicorn/prefer-ternary": "off",
+		},
+	},
+)
