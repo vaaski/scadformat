@@ -14,17 +14,17 @@ const esbuildProblemMatcherPlugin = {
 			console.log("[watch] build started")
 		})
 		build.onEnd((result) => {
-			result.errors.forEach(({ text, location }) => {
+			for (const { text, location } of result.errors) {
 				console.error(`✘ [ERROR] ${text}`)
 				console.error(`    ${location.file}:${location.line}:${location.column}:`)
-			})
+			}
 			console.log("[watch] build finished")
 		})
 	},
 }
 
 async function main() {
-	const ctx = await esbuild.context({
+	const context = await esbuild.context({
 		entryPoints: ["src/extension.ts"],
 		bundle: true,
 		format: "cjs",
@@ -41,14 +41,14 @@ async function main() {
 		],
 	})
 	if (watch) {
-		await ctx.watch()
+		await context.watch()
 	} else {
-		await ctx.rebuild()
-		await ctx.dispose()
+		await context.rebuild()
+		await context.dispose()
 	}
 }
 
-main().catch((e) => {
-	console.error(e)
+main().catch((error) => {
+	console.error(error)
 	process.exit(1)
 })
