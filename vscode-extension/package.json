@@ -24,6 +24,12 @@
 		"vsce:package": "vsce package --no-dependencies",
 		"vsce:publish": "vsce publish --no-dependencies"
 	},
+	"publisher": "vaaski",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vaaski/scadformat",
+		"directory": "vscode-extension"
+	},
 	"contributes": {
 		"commands": [
 			{
