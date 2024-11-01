@@ -3,3 +3,5 @@
 /.antlr
 /scadformat
 /scadformat.exe
+
+.DS_Store
