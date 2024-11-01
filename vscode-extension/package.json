@@ -49,7 +49,17 @@
 					".scad"
 				]
 			}
-		]
+		],
+		"configuration": {
+			"title": "scadformat",
+			"properties": {
+				"scadformat.binPath": {
+					"type": "string",
+					"default": "scadformat",
+					"description": "Path to scadformat binary, uses `scadformat` in $PATH by default"
+				}
+			}
+		}
 	},
 	"activationEvents": [
 		"onLanguage:scad",

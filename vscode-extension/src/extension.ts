@@ -1,10 +1,25 @@
+import path from "node:path"
+import os from "node:os"
 import * as vscode from "vscode"
 
+const getBinPath = () => {
+	const config = vscode.workspace.getConfiguration("scadformat")
+	let binPath = config.get<string>("binPath", "scadformat")
+
+	if (binPath.startsWith("~/")) {
+		binPath = path.join(os.homedir(), binPath.replace("~/", ""))
+	}
+
+	return binPath
+}
+
 export const format = async (text: string) => {
-	// todo: somehow get ESM working
+	// todo: somehow get ESM working or use native child_process
 	const { execa } = await import("execa")
 
-	const command = execa("scadformat")
+	const binPath = getBinPath()
+
+	const command = execa(binPath)
 	command.stdin.write(text)
 	command.stdin.end()
 
@@ -28,7 +43,15 @@ export function activate(context: vscode.ExtensionContext) {
 				console.error(error)
 
 				if (error instanceof Error) {
-					vscode.window.showErrorMessage(`Failed to format document\n\n${error.message}`)
+					if (error.message.includes("ENOENT")) {
+						vscode.window.showErrorMessage(
+							`Failed to format document. Make sure you have "scadformat" in you path or configure the "scadformat.binPath" setting.`,
+						)
+					} else {
+						vscode.window.showErrorMessage(
+							`Failed to format document\n\n${error.message}`,
+						)
+					}
 				} else {
 					vscode.window.showErrorMessage("Failed to format document")
 				}
