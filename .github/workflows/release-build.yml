@@ -15,11 +15,12 @@ jobs:
         # Workaround for https://github.com/actions/checkout/issues/290
       run: git fetch --force --tags
     - name: Download Artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: build-artifacts
+        pattern: build-artifacts-*
+        merge-multiple: true
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: "*.zip"
 
@@ -37,14 +38,14 @@ jobs:
         # Workaround for https://github.com/actions/checkout/issues/290
       run: git fetch --force --tags
     - name: Setup Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
-        go-version: '1.21.x'
+        go-version: '1.23.x'
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '21'
     - name: Install ANTLR
       run: pip install antlr4-tools
     - name: Build and Test
@@ -52,9 +53,9 @@ jobs:
     - name: Zip Artifact
       run: powershell Compress-Archive scadformat.exe windows.zip
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: build-artifacts
+        name: build-artifacts-windows
         path: windows.zip
 
   build-macos:
@@ -67,14 +68,14 @@ jobs:
         # Workaround for https://github.com/actions/checkout/issues/290
       run: git fetch --force --tags
     - name: Setup Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
-        go-version: '1.21.x'
+        go-version: '1.23.x'
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '21'
     - name: Install ANTLR
       run: pip install antlr4-tools
     - name: Build and Test
@@ -82,9 +83,9 @@ jobs:
     - name: Zip Artifact
       run: zip macos.zip scadformat
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: build-artifacts
+        name: build-artifacts-macos
         path: macos.zip
 
   build-linux:
@@ -97,9 +98,9 @@ jobs:
         # Workaround for https://github.com/actions/checkout/issues/290
       run: git fetch --force --tags
     - name: Setup Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
-        go-version: '1.21.x'
+        go-version: '1.23.x'
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
@@ -112,7 +113,7 @@ jobs:
     - name: Zip Artifact
       run: zip linux.zip scadformat
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: build-artifacts
+        name: build-artifacts-linux
         path: linux.zip
